@@ -2,8 +2,6 @@
 
 <br />
 
-<img src="assets/logo.png" alt="OralAI Logo" width="80" height="80" />
-
 <h1>🧬 OralAI — AI-Powered Oral Cancer Triage Engine</h1>
 
 <p><strong>Scalable Rural Screening Through Intelligent Risk Stratification</strong><br/>
