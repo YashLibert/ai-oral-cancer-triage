@@ -395,11 +395,13 @@ Analyze an oral image with patient metadata and return a triage result.
 
 ## 👥 Team
 
-Yash Kulkarni 
-Krishi Daspute
-Jaya Jadhav
-Vaishnavi Ghule
-Pranjali Jadhav
+| Name |
+|------|
+| Yash Kulkarni |
+| Krishi Daspute |
+| Jaya Jadhav |
+| Vaishnavi Ghule |
+| Pranjali Jadhav |
 
 ---
 
