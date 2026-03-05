@@ -401,6 +401,96 @@ const styles = `
   .empty-icon { font-size: 30px; opacity: 0.4; }
   .empty-text { font-size: 13px; line-height: 1.5; }
 
+  .btn-advanced-diag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 10px;
+    padding: 11px 16px;
+    background: linear-gradient(135deg, rgba(244,63,94,0.15), rgba(245,158,11,0.12));
+    border: 1px solid rgba(244,63,94,0.45);
+    border-radius: 11px;
+    font-size: 12.5px;
+    font-weight: 700;
+    font-family: 'Outfit', sans-serif;
+    color: var(--rose2);
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    transition: all 0.22s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-advanced-diag::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(244,63,94,0.08), transparent);
+    opacity: 0;
+    transition: opacity 0.22s;
+  }
+
+  .btn-advanced-diag:hover {
+    border-color: rgba(244,63,94,0.7);
+    box-shadow: 0 0 24px rgba(244,63,94,0.2), 0 4px 16px rgba(244,63,94,0.12);
+    transform: translateY(-1px);
+    color: #fff;
+  }
+
+  .btn-advanced-diag:hover::before { opacity: 1; }
+  .btn-advanced-diag:active { transform: scale(0.98); }
+
+  .btn-advanced-diag-pulse {
+    width: 7px; height: 7px;
+    background: var(--rose);
+    border-radius: 50%;
+    animation: ripple 1.5s infinite;
+    flex-shrink: 0;
+  }
+
+
+  /* ── Advanced Diagnosis Modal & Report ── */
+  .adv-backdrop { position:fixed; inset:0; background:rgba(7,8,15,0.88); backdrop-filter:blur(10px); z-index:200; }
+  .adv-modal { position:fixed; top:0; left:0; right:0; bottom:0; margin:auto; z-index:201; width:min(720px,95vw); height:fit-content; max-height:92vh; overflow-y:auto; background:var(--surface); border:1px solid rgba(244,63,94,0.28); border-radius:22px; box-shadow:0 0 80px rgba(244,63,94,0.10),0 32px 80px rgba(0,0,0,0.65); }
+  .adv-header { padding:20px 26px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; background:var(--surface); border-radius:22px 22px 0 0; z-index:2; }
+  .adv-body { padding:24px 26px; display:flex; flex-direction:column; gap:20px; }
+  .adv-close { width:30px; height:30px; border-radius:8px; background:rgba(255,255,255,0.04); border:1px solid var(--border); color:var(--text3); font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.18s; font-family:inherit; }
+  .adv-close:hover { color:var(--text); background:rgba(255,255,255,0.08); }
+
+  .sym-row { display:flex; align-items:center; justify-content:space-between; padding:13px 16px; background:var(--card); border:1px solid var(--border); border-radius:12px; gap:16px; transition:border-color 0.18s; }
+  .sym-row:hover { border-color:var(--borderHi); }
+  .sym-label { font-size:13px; font-weight:600; color:var(--text2); }
+  .sym-sub { font-size:11px; color:var(--text3); margin-top:2px; }
+  .sym-opts { display:flex; gap:7px; flex-shrink:0; }
+  .sym-btn { padding:5px 16px; border-radius:20px; font-size:12px; font-weight:600; font-family:'Outfit',sans-serif; cursor:pointer; border:1px solid var(--border); background:transparent; color:var(--text3); transition:all 0.18s; white-space:nowrap; }
+  .sym-btn:hover { border-color:var(--borderHi); color:var(--text2); }
+  .sym-btn.s-none   { background:rgba(16,185,129,0.10); border-color:rgba(16,185,129,0.30); color:var(--emerald2); }
+  .sym-btn.s-mild   { background:rgba(245,158,11,0.10); border-color:rgba(245,158,11,0.35); color:var(--amber2); }
+  .sym-btn.s-severe { background:rgba(244,63,94,0.12);  border-color:rgba(244,63,94,0.40);  color:var(--rose2); }
+  .sym-btn.s-yes    { background:rgba(244,63,94,0.12);  border-color:rgba(244,63,94,0.40);  color:var(--rose2); }
+  .sym-btn.s-no     { background:rgba(16,185,129,0.10); border-color:rgba(16,185,129,0.30); color:var(--emerald2); }
+
+  .btn-gen  { display:flex; align-items:center; justify-content:center; gap:8px; padding:13px 20px; background:linear-gradient(135deg,#f43f5e,#f59e0b); border:none; border-radius:12px; font-size:14px; font-weight:700; color:#000; font-family:'Outfit',sans-serif; cursor:pointer; box-shadow:0 4px 24px rgba(244,63,94,0.30); transition:all 0.2s; }
+  .btn-gen:hover { transform:translateY(-2px); box-shadow:0 8px 32px rgba(244,63,94,0.45); }
+  .btn-dl   { display:flex; align-items:center; justify-content:center; gap:9px; padding:14px 20px; background:linear-gradient(135deg,#a855f7,#7c3aed); border:none; border-radius:12px; font-size:14px; font-weight:700; color:#fff; font-family:'Outfit',sans-serif; cursor:pointer; box-shadow:0 4px 24px rgba(168,85,247,0.35); transition:all 0.2s; }
+  .btn-dl:hover { transform:translateY(-2px); box-shadow:0 8px 32px rgba(168,85,247,0.50); }
+  .btn-back-q { background:transparent; border:1px solid var(--border); border-radius:10px; padding:10px; font-size:12px; color:var(--text3); cursor:pointer; font-family:'Outfit',sans-serif; transition:color 0.18s,border-color 0.18s; }
+  .btn-back-q:hover { color:var(--text2); border-color:var(--borderHi); }
+
+  .rpt-sec { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text3); margin-bottom:11px; display:flex; align-items:center; gap:8px; }
+  .rpt-g2 { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+  .rpt-g3 { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; }
+  .rpt-f { padding:11px 14px; background:var(--card); border:1px solid var(--border); border-radius:10px; }
+  .rpt-f.w { background:rgba(244,63,94,0.05); border-color:rgba(244,63,94,0.22); }
+  .rpt-fl { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--text3); font-weight:600; }
+  .rpt-fv { font-size:13px; font-weight:600; color:var(--text); margin-top:3px; }
+  .rpt-fv.w { color:var(--rose2); }
+  .rpt-fv.ok { color:var(--emerald2); }
+  .rpt-risk-banner { padding:16px 20px; background:rgba(244,63,94,0.07); border:1px solid rgba(244,63,94,0.25); border-radius:14px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+
+  @media(max-width:640px) { .rpt-g3 { grid-template-columns:1fr 1fr; } .sym-opts { flex-wrap:wrap; } }
   @media (max-width: 1100px) {
     .app { grid-template-columns: 1fr; }
     .sidebar { display: none; }
@@ -495,6 +585,581 @@ function Gauge({ score, triage }) {
   );
 }
 
+
+/* ─── PDF DOWNLOAD (jsPDF – true .pdf, dark clinical aesthetic) ─────────────── */
+async function downloadMedicalReport({ age, tobacco, alcohol, lesionDuration,
+  cancerProb, normalProb, lifestyleRisk, finalRisk, triageLevel, recommendation,
+  scanTime, fileName, pain, bleeding, swallowing, weightLoss, neckSwelling }) {
+
+  if (!window.jspdf) {
+    await new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+      s.onload = resolve; s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: "mm", format: "a4" });
+  const W = 210, H = 297, M = 16, CW = W - M * 2;
+  let y = 0;
+
+  // ── Palette ──
+  const rose      = [244, 63,  94];
+  const roseDeep  = [180, 30,  55];
+  const roseDim   = [80,  20,  32];
+  const roseText  = [253, 164, 175];
+  const amber     = [245, 158, 11];
+  const amberText = [252, 211, 77];
+  const emerald   = [16,  185, 129];
+  const emeraldT  = [110, 231, 183];
+  const violet    = [168, 85,  247];
+  const violetT   = [216, 180, 254];
+  const cyan      = [0,   229, 255];
+  const cyanT     = [128, 243, 255];
+  const bg        = [7,   8,   15];
+  const surface   = [14,  17,  32];
+  const surface2  = [20,  25,  48];
+  const border    = [30,  36,  64];
+  const borderHi  = [46,  54,  96];
+  const white     = [238, 242, 255];
+  const gray      = [148, 163, 184];
+  const gray2     = [71,  85,  105];
+  const gray3     = [40,  48,  70];
+
+  const sf  = (c) => doc.setFillColor(...c);
+  const sd  = (c) => doc.setDrawColor(...c);
+  const st  = (c) => doc.setTextColor(...c);
+  const sfz = (sz, w="normal") => { doc.setFontSize(sz); doc.setFont("helvetica", w); };
+
+  // rounded rect — fill only, stroke only, or both
+  const rr = (x, ry, w, h, r, mode="F") => doc.roundedRect(x, ry, w, h, r, r, mode);
+
+  // progress bar
+  const pbar = (bx, by, bw, bh, pct, trackC, fillC) => {
+    sf(trackC); rr(bx, by, bw, bh, bh / 2);
+    if (pct > 0) { sf(fillC); rr(bx, by, Math.max(bw * (pct / 100), bh), bh, bh / 2); }
+  };
+
+  // section header with accent stripe + dotted rule
+  const secHead = (title, accentC) => {
+    sf(accentC); doc.rect(M, y, 2.8, 4.5, "F");
+    sfz(7, "bold"); st(gray);
+    doc.text(title.toUpperCase(), M + 5.5, y + 3.5);
+    sd(border); doc.setLineWidth(0.25);
+    const tw = doc.getTextWidth(title.toUpperCase());
+    doc.line(M + 5.5 + tw + 3, y + 2.2, W - M, y + 2.2);
+    y += 9;
+  };
+
+  // info card (label + value with optional warn state)
+  const card = (cx, cy, cw, ch, label, value, warn = false) => {
+    sf(warn ? roseDim : surface2);
+    sd(warn ? roseDeep : border);
+    doc.setLineWidth(0.3);
+    rr(cx, cy, cw, ch, 2.5, "FD");
+    // left accent strip
+    sf(warn ? rose : gray3); doc.rect(cx, cy, 2, ch, "F");
+    sfz(5.5, "bold"); st(warn ? roseText : gray2);
+    doc.text(label.toUpperCase(), cx + 5, cy + 5.5);
+    sfz(8, "bold"); st(warn ? roseText : white);
+    // truncate long values
+    const maxW = cw - 8;
+    let val = String(value);
+    while (doc.getTextWidth(val) > maxW && val.length > 3) val = val.slice(0, -1);
+    if (val !== String(value)) val += "..";
+    doc.text(val, cx + 5, cy + 12.5);
+  };
+
+  // ══════════════════════════════════════════════════════════
+  // BACKGROUND
+  // ══════════════════════════════════════════════════════════
+  sf(bg); doc.rect(0, 0, W, H, "F");
+
+  // subtle ambient glow blobs
+  doc.saveGraphicsState();
+  doc.setGState(new doc.GState({ opacity: 0.045 }));
+  sf(violet); doc.ellipse(20, 25, 60, 45, "F");
+  sf(cyan);   doc.ellipse(W - 18, H - 28, 55, 42, "F");
+  sf(rose);   doc.ellipse(W / 2, H / 2, 40, 30, "F");
+  doc.restoreGraphicsState();
+
+  // ══════════════════════════════════════════════════════════
+  // HEADER BAND
+  // ══════════════════════════════════════════════════════════
+  sf(surface); doc.rect(0, 0, W, 36, "F");
+  sd(border); doc.setLineWidth(0.35); doc.line(0, 36, W, 36);
+
+  // top accent lines
+  doc.setLineWidth(1.6); sd(rose);   doc.line(0, 0, W * 0.55, 0);
+  doc.setLineWidth(1.6); sd(violet); doc.line(W * 0.55, 0, W * 0.78, 0);
+  doc.setLineWidth(1.6); sd(cyan);   doc.line(W * 0.78, 0, W, 0);
+
+  // logo box
+  sf(violet); rr(M, 7, 21, 21, 3.5, "F");
+  // inner glow
+  doc.saveGraphicsState();
+  doc.setGState(new doc.GState({ opacity: 0.3 }));
+  sf(cyanT); rr(M + 5, 12, 11, 11, 2, "F");
+  doc.restoreGraphicsState();
+  sfz(12, "bold"); st(white); doc.text("O", M + 7, 21);
+
+  // title block
+  sfz(14, "bold"); st(white);
+  doc.text("AI Oral Cancer Triage Report", M + 26, 17);
+  sfz(7); st(gray);
+  doc.text("OralAI Detection System  |  Rural Camp Mode  |  Maharashtra, India", M + 26, 23.5);
+
+  // meta (right-aligned)
+  const now = new Date().toLocaleString("en-IN");
+  sfz(6); st(gray2);
+  doc.text(`Generated: ${now}`, W - M, 13, { align: "right" });
+  doc.text(`File: ${(fileName || "N/A").substring(0, 30)}`, W - M, 19, { align: "right" });
+  doc.text(`Scan time: ${scanTime || "--"}s`, W - M, 25, { align: "right" });
+
+  y = 44;
+
+  // ══════════════════════════════════════════════════════════
+  // URGENT REFERRAL BANNER
+  // ══════════════════════════════════════════════════════════
+  sf(roseDim); sd(rose); doc.setLineWidth(0.5); rr(M, y, CW, 24, 3.5, "FD");
+  // pulsing dot rings (simulate)
+  doc.saveGraphicsState();
+  doc.setGState(new doc.GState({ opacity: 0.18 }));
+  sf(rose); doc.circle(M + 10, y + 12, 6, "F");
+  doc.restoreGraphicsState();
+  sf(rose); doc.circle(M + 10, y + 12, 3.8, "F");
+  sf(white); doc.circle(M + 10, y + 12, 1.4, "F");
+
+  sfz(11, "bold"); st(roseText);
+  doc.text(triageLevel, M + 19, y + 9);
+  sfz(7.5); st(gray);
+  doc.text(recommendation, M + 19, y + 16);
+
+  // big risk number
+  sfz(22, "bold"); st(rose);
+  doc.text(`${finalRisk}%`, W - M - 3, y + 14, { align: "right" });
+  sfz(6); st(gray2);
+  doc.text("FINAL RISK SCORE", W - M - 3, y + 20.5, { align: "right" });
+
+  y += 31;
+
+  // ══════════════════════════════════════════════════════════
+  // PATIENT DETAILS
+  // ══════════════════════════════════════════════════════════
+  secHead("Patient Details", cyan);
+  const cw4 = (CW - 9) / 4;
+  [
+    { l: "Age",             v: `${age} yrs`,                                   w: false },
+    { l: "Lesion Duration", v: `${lesionDuration || 0} days`,                  w: parseInt(lesionDuration) >= 14 },
+    { l: "Tobacco Use",     v: tobacco === "yes" ? "Yes — High Risk" : "None", w: tobacco === "yes" },
+    { l: "Alcohol Use",     v: alcohol === "yes" ? "Yes — High Risk" : "None", w: alcohol === "yes" },
+  ].forEach((c, i) => card(M + i * (cw4 + 3), y, cw4, 17, c.l, c.v, c.w));
+  y += 23;
+
+  // ══════════════════════════════════════════════════════════
+  // IMAGE ANALYSIS
+  // ══════════════════════════════════════════════════════════
+  secHead("Image Analysis Results", rose);
+  [
+    { l: "Cancer Probability", v: cancerProb,  c: rose,    t: roseText  },
+    { l: "Normal Probability", v: normalProb,  c: emerald, t: emeraldT  },
+  ].forEach(b => {
+    sfz(7.5); st(gray); doc.text(b.l, M, y + 3.5);
+    pbar(M + 50, y - 0.5, CW - 68, 5, b.v, border, b.c);
+    sfz(8, "bold"); st(b.t); doc.text(`${b.v}%`, W - M, y + 3.5, { align: "right" });
+    y += 9;
+  });
+  y += 3;
+
+  // ══════════════════════════════════════════════════════════
+  // LIFESTYLE RISK
+  // ══════════════════════════════════════════════════════════
+  secHead("Lifestyle Risk Factors", amber);
+  [
+    { l: "Lifestyle Risk Score",        v: lifestyleRisk, c: amber, t: amberText },
+    { l: "Final Fused Risk Score",      v: finalRisk,     c: rose,  t: roseText  },
+  ].forEach(b => {
+    sfz(7.5); st(gray); doc.text(b.l, M, y + 3.5);
+    pbar(M + 50, y - 0.5, CW - 68, 5, b.v, border, b.c);
+    sfz(8, "bold"); st(b.t); doc.text(`${b.v}%`, W - M, y + 3.5, { align: "right" });
+    y += 9;
+  });
+  y += 3;
+
+  // ══════════════════════════════════════════════════════════
+  // ADVANCED SYMPTOMS
+  // ══════════════════════════════════════════════════════════
+  secHead("Advanced Symptoms", violet);
+  const painLabel = pain === "none" ? "None — Safe" : pain === "mild" ? "Mild — Caution" : "Severe — Alert";
+  const cw5 = (CW - 12) / 5;
+  [
+    { l: "Pain Level",        v: painLabel,                                       w: pain !== "none"       },
+    { l: "Bleeding",          v: bleeding    === "yes" ? "Present" : "Absent",    w: bleeding === "yes"    },
+    { l: "Swallowing",        v: swallowing  === "yes" ? "Difficulty" : "Normal", w: swallowing === "yes"  },
+    { l: "Weight Loss",       v: weightLoss  === "yes" ? "Present" : "None",      w: weightLoss === "yes"  },
+    { l: "Lymph Node",        v: neckSwelling=== "yes" ? "Present" : "Absent",    w: neckSwelling === "yes"},
+  ].forEach((s, i) => card(M + i * (cw5 + 3), y, cw5, 17, s.l, s.v, s.w));
+  y += 23;
+
+  // ══════════════════════════════════════════════════════════
+  // FINAL RISK ASSESSMENT
+  // ══════════════════════════════════════════════════════════
+  secHead("Final Risk Assessment", rose);
+  sf(roseDim); sd(rose); doc.setLineWidth(0.4); rr(M, y, CW, 26, 3.5, "FD");
+
+  sfz(6.5); st(gray2); doc.text("TRIAGE DECISION", M + 7, y + 7);
+  sfz(13, "bold"); st(rose); doc.text(triageLevel, M + 7, y + 14.5);
+  sfz(7); st(gray); doc.text(recommendation, M + 7, y + 20.5);
+
+  sfz(24, "bold"); st(rose); doc.text(`${finalRisk}%`, W - M - 4, y + 16, { align: "right" });
+  sfz(6); st(gray2); doc.text("RISK SCORE", W - M - 4, y + 22, { align: "right" });
+
+  // formula note
+  sfz(6); st(gray2);
+  doc.text("Formula: 60% x Image  +  25% x Lifestyle  +  15% x Symptoms", M + 7, y + 27.5);
+  y += 34;
+
+  // ══════════════════════════════════════════════════════════
+  // CLINICAL RECOMMENDATIONS
+  // ══════════════════════════════════════════════════════════
+  secHead("Clinical Recommendations", amber);
+  const recs = [
+    { title: "Immediate Referral",      text: "Contact oncology specialist within 24-48 hrs. Do not delay under any circumstances.", accent: rose    },
+    { title: "Biopsy Required",         text: "Schedule tissue biopsy within 7 days for definitive histopathological diagnosis.",     accent: violet  },
+    { title: "Document & Flag",         text: "Complete clinical documentation. Flag patient record for priority follow-up tracking.", accent: amber   },
+    { title: "Patient Counselling",     text: "Inform patient carefully. Provide psychosocial support and a formal referral letter.",  accent: cyan    },
+    { title: "Specialist Consultation", text: "Coordinate with tertiary oncology centre for advanced imaging (MRI/CT) if indicated.", accent: emerald },
+  ];
+  recs.forEach(r => {
+    sf(surface); sd(border); doc.setLineWidth(0.25); rr(M, y, CW, 14, 2.5, "FD");
+    sf(r.accent); doc.rect(M, y, 2.5, 14, "F");
+    sfz(7.5, "bold"); st(r.accent); doc.text(r.title, M + 7, y + 5.5);
+    sfz(6.8); st(gray); doc.text(r.text, M + 7, y + 10.5, { maxWidth: CW - 12 });
+    y += 16;
+  });
+
+  // ══════════════════════════════════════════════════════════
+  // FOOTER
+  // ══════════════════════════════════════════════════════════
+  const fy = H - 14;
+  sd(border); doc.setLineWidth(0.3); doc.line(M, fy, W - M, fy);
+  sfz(5.8); st(gray2);
+  doc.text("OralAI Detection System  |  AI-Powered Oral Cancer Screening  |  Rural Health Camps  |  Maharashtra, India", W / 2, fy + 4.5, { align: "center" });
+  doc.text("DISCLAIMER: This report is AI-generated and must be reviewed by a qualified medical professional before any clinical action is taken.", W / 2, fy + 9, { align: "center" });
+  sfz(5.8); st(gray2); doc.text("Page 1 of 1", W - M, fy + 4.5, { align: "right" });
+
+  doc.save(`OralAI_Report_${Date.now()}.pdf`);
+}
+
+/* ─── ADVANCED DIAGNOSIS MODAL ─────────────────────────────────────────────── */
+function AdvancedDiagModal({ apiData, age, tobacco, alcohol, lesionDuration, scanTime, fileName, onClose }) {
+  const [pain,         setPain]         = useState("none");
+  const [bleeding,     setBleeding]     = useState("no");
+  const [swallowing,   setSwallowing]   = useState("no");
+  const [weightLoss,   setWeightLoss]   = useState("no");
+  const [neckSwelling, setNeckSwelling] = useState("no");
+  const [stage,        setStage]        = useState("form"); // "form" | "report"
+  const [pdfLoading,   setPdfLoading]   = useState(false);
+
+  const cancerProb    = apiData?.image_analysis?.cancer_probability ?? 0;
+  const normalProb    = apiData?.image_analysis?.normal_probability ?? 0;
+  const lifestyleRisk = apiData?.lifestyle_risk_score ?? 0;
+  const finalRisk     = apiData?.final_risk_score ?? 0;
+  const triageLevel   = apiData?.triage_level ?? "";
+  const recommendation= apiData?.recommendation ?? "";
+
+  /* helper: option button */
+  const Opt = ({ field, val, label, setFn, cls }) => (
+    <button
+      className={`sym-btn${field === val ? ` s-${cls || val}` : ""}`}
+      onClick={() => setFn(val)}
+    >{label}</button>
+  );
+
+  /* symptom display strings */
+  const painDisplay = pain === "none" ? "None ✅" : pain === "mild" ? "Mild ⚠️" : "Severe 🚨";
+  const dispMap = (v, pos="Present 🚨", neg="Absent ✅") => v === "yes" ? pos : neg;
+  const isWarn  = (v) => v !== "no" && v !== "none";
+
+  return (
+    <>
+      <motion.div className="adv-backdrop"
+        initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}
+        transition={{ duration:0.22 }} onClick={onClose}
+      />
+      <motion.div className="adv-modal"
+        initial={{ opacity:0, scale:0.93 }}
+        animate={{ opacity:1, scale:1 }}
+        exit={{ opacity:0, scale:0.96 }}
+        transition={{ duration:0.36, ease:[0.22,1,0.36,1] }}
+      >
+        {/* ── Header ── */}
+        <div className="adv-header">
+          <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+            <div style={{ width:40, height:40, borderRadius:11, background:"rgba(244,63,94,0.12)", border:"1px solid rgba(244,63,94,0.30)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:20 }}>🔬</div>
+            <div>
+              <div style={{ fontSize:15, fontWeight:800, color:"var(--text)", letterSpacing:"-0.3px" }}>Advanced Diagnosis</div>
+              <div style={{ fontSize:11, color:"var(--text3)", marginTop:1 }}>
+                {stage === "form" ? "Step 1 of 2 · Clinical Symptom Questionnaire" : "Step 2 of 2 · AI Medical Report"}
+              </div>
+            </div>
+          </div>
+          <button className="adv-close" onClick={onClose}>✕</button>
+        </div>
+
+        <div className="adv-body">
+
+          {/* Scan result banner — always visible */}
+          <div style={{ padding:"13px 18px", background:"rgba(244,63,94,0.07)", border:"1px solid rgba(244,63,94,0.24)", borderRadius:12, display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:10 }}>
+            <div>
+              <div style={{ fontSize:10, color:"var(--text3)", letterSpacing:1.5, textTransform:"uppercase", fontFamily:"Space Mono, monospace", marginBottom:4 }}>Initial Scan Result</div>
+              <div style={{ display:"inline-flex", alignItems:"center", gap:6, padding:"4px 12px", background:"rgba(244,63,94,0.12)", border:"1px solid rgba(244,63,94,0.3)", borderRadius:20, fontSize:12, fontWeight:700, color:"var(--rose2)" }}>🚨 {triageLevel}</div>
+            </div>
+            <div style={{ textAlign:"right" }}>
+              <div style={{ fontSize:10, color:"var(--text3)", fontFamily:"Space Mono, monospace" }}>CANCER · FINAL RISK</div>
+              <div style={{ fontFamily:"Space Mono, monospace", fontSize:18, fontWeight:700, color:"var(--rose)", marginTop:2 }}>{cancerProb}% · {finalRisk}%</div>
+            </div>
+          </div>
+
+          <AnimatePresence mode="wait">
+
+            {/* ── STAGE: FORM ── */}
+            {stage === "form" && (
+              <motion.div key="form"
+                initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-8 }}
+                transition={{ duration:0.28 }}
+                style={{ display:"flex", flexDirection:"column", gap:16 }}
+              >
+                <div style={{ fontSize:10, fontWeight:700, letterSpacing:2, textTransform:"uppercase", color:"var(--text3)", display:"flex", alignItems:"center", gap:8 }}>
+                  <div style={{ width:3, height:14, borderRadius:2, background:"linear-gradient(180deg,var(--rose),var(--amber))" }} />
+                  Please answer all symptom fields below
+                </div>
+
+                <div style={{ display:"flex", flexDirection:"column", gap:9 }}>
+
+                  <div className="sym-row">
+                    <div><div className="sym-label">Pain Level</div><div className="sym-sub">Oral pain or discomfort felt by patient</div></div>
+                    <div className="sym-opts">
+                      <Opt field={pain} val="none"   label="None"   setFn={setPain} cls="none" />
+                      <Opt field={pain} val="mild"   label="Mild"   setFn={setPain} cls="mild" />
+                      <Opt field={pain} val="severe" label="Severe" setFn={setPain} cls="severe" />
+                    </div>
+                  </div>
+
+                  <div className="sym-row">
+                    <div><div className="sym-label">Bleeding from Lesion</div><div className="sym-sub">Any spontaneous or contact bleeding</div></div>
+                    <div className="sym-opts">
+                      <Opt field={bleeding} val="no"  label="No"  setFn={setBleeding} />
+                      <Opt field={bleeding} val="yes" label="Yes" setFn={setBleeding} />
+                    </div>
+                  </div>
+
+                  <div className="sym-row">
+                    <div><div className="sym-label">Difficulty Swallowing</div><div className="sym-sub">Trouble eating or swallowing food / liquids</div></div>
+                    <div className="sym-opts">
+                      <Opt field={swallowing} val="no"  label="No"  setFn={setSwallowing} />
+                      <Opt field={swallowing} val="yes" label="Yes" setFn={setSwallowing} />
+                    </div>
+                  </div>
+
+                  <div className="sym-row">
+                    <div><div className="sym-label">Weight Loss Recently</div><div className="sym-sub">Unexplained or unintentional weight loss</div></div>
+                    <div className="sym-opts">
+                      <Opt field={weightLoss} val="no"  label="No"  setFn={setWeightLoss} />
+                      <Opt field={weightLoss} val="yes" label="Yes" setFn={setWeightLoss} />
+                    </div>
+                  </div>
+
+                  <div className="sym-row">
+                    <div><div className="sym-label">Lymph Node Swelling</div><div className="sym-sub">Palpable swelling in neck or jaw region</div></div>
+                    <div className="sym-opts">
+                      <Opt field={neckSwelling} val="no"  label="No"  setFn={setNeckSwelling} />
+                      <Opt field={neckSwelling} val="yes" label="Yes" setFn={setNeckSwelling} />
+                    </div>
+                  </div>
+
+                </div>
+
+                <motion.button className="btn-gen" onClick={() => setStage("report")}
+                  whileHover={{ scale:1.02 }} whileTap={{ scale:0.97 }}>
+                  📋 Generate Medical Report
+                </motion.button>
+              </motion.div>
+            )}
+
+            {/* ── STAGE: REPORT ── */}
+            {stage === "report" && (
+              <motion.div key="report"
+                initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0 }}
+                transition={{ duration:0.32 }}
+                style={{ display:"flex", flexDirection:"column", gap:18 }}
+              >
+                {/* Patient Details */}
+                <div>
+                  <div className="rpt-sec">
+                    <div style={{ width:3, height:14, borderRadius:2, background:"linear-gradient(180deg,var(--cyan),var(--violet))" }} />
+                    Patient Details
+                  </div>
+                  <div className="rpt-g2">
+                    {[
+                      { l:"Age",             v:`${age} years`,                                   w:false },
+                      { l:"Lesion Duration", v:`${lesionDuration||0} days`,                     w:parseInt(lesionDuration)>=14 },
+                      { l:"Tobacco Use",     v:tobacco==="yes"?"Yes ⚠️":"No ✅",                w:tobacco==="yes" },
+                      { l:"Alcohol Use",     v:alcohol==="yes"?"Yes ⚠️":"No ✅",                w:alcohol==="yes" },
+                    ].map(f => (
+                      <div className={`rpt-f${f.w?" w":""}`} key={f.l}>
+                        <div className="rpt-fl">{f.l}</div>
+                        <div className={`rpt-fv${f.w?" w":""}`}>{f.v}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Image Analysis Results */}
+                <div>
+                  <div className="rpt-sec">
+                    <div style={{ width:3, height:14, borderRadius:2, background:"linear-gradient(180deg,var(--rose),var(--amber))" }} />
+                    Image Analysis Results
+                  </div>
+                  <div style={{ display:"flex", flexDirection:"column", gap:9 }}>
+                    {[
+                      { l:"Cancer Probability", v:cancerProb,    h:"#f43f5e" },
+                      { l:"Normal Probability",  v:normalProb,    h:"#10b981" },
+                      { l:"Lifestyle Risk Score",v:lifestyleRisk, h:"#f59e0b" },
+                      { l:"Final Risk (Fused)",  v:finalRisk,     h:"#a855f7" },
+                    ].map((m,i) => (
+                      <div key={m.l} style={{ display:"flex", alignItems:"center", gap:10 }}>
+                        <div style={{ fontSize:12, color:"var(--text2)", width:148, flexShrink:0 }}>{m.l}</div>
+                        <div style={{ flex:1, height:7, background:"var(--border)", borderRadius:4, overflow:"hidden" }}>
+                          <motion.div style={{ height:"100%", background:`linear-gradient(90deg,${m.h},${m.h}88)`, borderRadius:4 }}
+                            initial={{ width:0 }} animate={{ width:`${m.v}%` }}
+                            transition={{ duration:0.9, delay:0.07*i, ease:[0.34,1.56,0.64,1] }} />
+                        </div>
+                        <div style={{ fontFamily:"Space Mono, monospace", fontSize:12, fontWeight:700, color:m.h, width:38, textAlign:"right" }}>{m.v}%</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Lifestyle Risk Factors */}
+                <div>
+                  <div className="rpt-sec">
+                    <div style={{ width:3, height:14, borderRadius:2, background:"linear-gradient(180deg,var(--amber),var(--emerald))" }} />
+                    Lifestyle Risk Factors
+                  </div>
+                  <div className="rpt-g2">
+                    {[
+                      { l:"Tobacco Use",     v:tobacco==="yes"?"Yes ⚠️":"No ✅",            w:tobacco==="yes" },
+                      { l:"Alcohol Use",     v:alcohol==="yes"?"Yes ⚠️":"No ✅",            w:alcohol==="yes" },
+                      { l:"Age Risk",        v:parseInt(age)>=45?"High Risk (≥45 yrs)":"Normal (<45 yrs)", w:parseInt(age)>=45 },
+                      { l:"Lesion Duration", v:`${lesionDuration||0} days${parseInt(lesionDuration)>=14?" ⚠️":""}`, w:parseInt(lesionDuration)>=14 },
+                    ].map(f => (
+                      <div className={`rpt-f${f.w?" w":""}`} key={f.l}>
+                        <div className="rpt-fl">{f.l}</div>
+                        <div className={`rpt-fv${f.w?" w":""}`}>{f.v}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Advanced Symptoms */}
+                <div>
+                  <div className="rpt-sec">
+                    <div style={{ width:3, height:14, borderRadius:2, background:"linear-gradient(180deg,var(--violet),var(--rose))" }} />
+                    Advanced Symptoms
+                  </div>
+                  <div className="rpt-g3">
+                    {[
+                      { l:"Pain Level",          v:painDisplay,                              w:pain!=="none" },
+                      { l:"Bleeding",             v:dispMap(bleeding),                        w:bleeding==="yes" },
+                      { l:"Swallowing",           v:dispMap(swallowing,"Difficulty 🚨","Normal ✅"), w:swallowing==="yes" },
+                      { l:"Weight Loss",          v:dispMap(weightLoss,"Present 🚨","None ✅"),w:weightLoss==="yes" },
+                      { l:"Lymph Node Swelling",  v:dispMap(neckSwelling),                   w:neckSwelling==="yes" },
+                    ].map(f => (
+                      <div className={`rpt-f${f.w?" w":""}`} key={f.l}>
+                        <div className="rpt-fl">{f.l}</div>
+                        <div className={`rpt-fv${f.w?" w":" ok"}`}>{f.v}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Final Risk Assessment */}
+                <div>
+                  <div className="rpt-sec">
+                    <div style={{ width:3, height:14, borderRadius:2, background:"linear-gradient(180deg,var(--rose),var(--amber))" }} />
+                    Final Risk Assessment
+                  </div>
+                  <div className="rpt-risk-banner">
+                    <div>
+                      <div style={{ fontSize:10, color:"var(--text3)", letterSpacing:1.5, textTransform:"uppercase", fontFamily:"Space Mono, monospace", marginBottom:5 }}>Triage Decision</div>
+                      <div style={{ fontSize:20, fontWeight:800, color:"var(--rose)", fontFamily:"Space Mono, monospace" }}>{triageLevel}</div>
+                      <div style={{ fontSize:11, color:"var(--text3)", marginTop:5 }}>{recommendation}</div>
+                    </div>
+                    <div style={{ fontFamily:"Space Mono, monospace", fontSize:36, fontWeight:800, color:"var(--rose)" }}>{finalRisk}%</div>
+                  </div>
+                </div>
+
+                {/* Clinical Recommendations */}
+                <div>
+                  <div className="rpt-sec">
+                    <div style={{ width:3, height:14, borderRadius:2, background:"linear-gradient(180deg,var(--amber),var(--cyan))" }} />
+                    Clinical Recommendations
+                  </div>
+                  <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+                    {[
+                      { icon:"🚨", title:"Immediate Referral",       text:"Contact oncology specialist within 24–48 hours. Do not delay." },
+                      { icon:"🧬", title:"Biopsy Required",          text:"Schedule tissue biopsy within 7 days for definitive histopathological diagnosis." },
+                      { icon:"📋", title:"Document & Flag",          text:"Complete clinical documentation. Flag patient for priority follow-up tracking." },
+                      { icon:"📞", title:"Patient Counselling",      text:"Inform patient carefully. Provide psychosocial support and a formal referral letter." },
+                      { icon:"🏥", title:"Specialist Consultation",  text:"Coordinate with tertiary oncology centre for advanced imaging (MRI/CT) if indicated." },
+                    ].map((r,i) => (
+                      <motion.div key={i}
+                        initial={{ opacity:0, x:-8 }} animate={{ opacity:1, x:0 }}
+                        transition={{ delay:0.04*i }}
+                        style={{ display:"flex", gap:11, alignItems:"flex-start", padding:"11px 14px", background:"var(--card)", border:"1px solid var(--border)", borderRadius:10 }}>
+                        <span style={{ fontSize:15, flexShrink:0, marginTop:1 }}>{r.icon}</span>
+                        <div>
+                          <div style={{ fontSize:12, fontWeight:700, color:"var(--text)", marginBottom:2 }}>{r.title}</div>
+                          <div style={{ fontSize:12, color:"var(--text2)", lineHeight:1.55 }}>{r.text}</div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Download Medical Report button */}
+                <motion.button className="btn-dl"
+                  disabled={pdfLoading}
+                  onClick={async () => {
+                    setPdfLoading(true);
+                    try {
+                      await downloadMedicalReport({ age, tobacco, alcohol, lesionDuration,
+                        cancerProb, normalProb, lifestyleRisk, finalRisk, triageLevel, recommendation,
+                        scanTime, fileName, pain, bleeding, swallowing, weightLoss, neckSwelling });
+                    } finally { setPdfLoading(false); }
+                  }}
+                  whileHover={{ scale: pdfLoading ? 1 : 1.02 }} whileTap={{ scale: pdfLoading ? 1 : 0.97 }}
+                  style={{ opacity: pdfLoading ? 0.7 : 1 }}>
+                  {pdfLoading ? "⏳ Generating PDF..." : "⬇️ Download Medical Report (.pdf)"}
+                </motion.button>
+
+                <button className="btn-back-q" onClick={() => setStage("form")}>
+                  ← Edit Symptom Answers
+                </button>
+
+              </motion.div>
+            )}
+
+          </AnimatePresence>
+        </div>
+      </motion.div>
+    </>
+  );
+}
+
 /* ─── DASHBOARD ─────────────────────────────────────────────────────────────── */
 export default function Dashboard({ onBack }) {
   const [age, setAge]                       = useState("");
@@ -511,6 +1176,7 @@ export default function Dashboard({ onBack }) {
   const [history, setHistory]   = useState(MOCK_HISTORY);
   const [scanTime, setScanTime] = useState(null);
   const [scanCount]             = useState(1284);
+  const [advancedDiagOpen, setAdvancedDiagOpen] = useState(false);
   const fileRef     = useRef();
   const currentFile = useRef(null);
 
@@ -808,11 +1474,32 @@ export default function Dashboard({ onBack }) {
                         exit={{ opacity:0 }}
                         transition={{ duration:0.4 }}
                       >
-                        <div className="preview-img-wrap">
-                          {preview && <img src={preview} alt="Scan" />}
-                          {loading && <div className="scan-line" />}
-                          <div className="corner tl"/><div className="corner tr"/>
-                          <div className="corner bl"/><div className="corner br"/>
+                        <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+                          <div className="preview-img-wrap">
+                            {preview && <img src={preview} alt="Scan" />}
+                            {loading && <div className="scan-line" />}
+                            <div className="corner tl"/><div className="corner tr"/>
+                            <div className="corner bl"/><div className="corner br"/>
+                          </div>
+
+                          {/* Advanced Diagnosis — only for URGENT REFERRAL */}
+                          <AnimatePresence>
+                            {apiData && triageLevel === "URGENT REFERRAL" && (
+                              <motion.button
+                                className="btn-advanced-diag"
+                                onClick={() => setAdvancedDiagOpen(true)}
+                                initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: 4, scale: 0.97 }}
+                                transition={{ duration: 0.4, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.97 }}
+                              >
+                                <div className="btn-advanced-diag-pulse" />
+                                🔬 Advanced Diagnosis
+                              </motion.button>
+                            )}
+                          </AnimatePresence>
                         </div>
 
                         <div className="result-panel">
@@ -964,7 +1651,7 @@ export default function Dashboard({ onBack }) {
                       {[
                         { label:"Image (Cancer %)",   val:cancerProb,    hex:"#f43f5e" },
                         { label:"Lifestyle Risk",      val:lifestyleRisk, hex:"#f59e0b" },
-                        { label:"Final Risk (Fused)",  val:finalRisk,     hex:"#a855f7" },
+                        { label:"Final Risk (Fused)",  val:finalRisk,     hex:"#00e5ff" },
                       ].map((s, i) => (
                         <div className="score-row" key={s.label}>
                           <div className="score-lbl">{s.label}</div>
@@ -980,7 +1667,7 @@ export default function Dashboard({ onBack }) {
                         </div>
                       ))}
                       <div style={{ marginTop:8, padding:"8px 10px", background:"var(--card)", borderRadius:8, fontSize:11, color:"var(--text3)", lineHeight:1.6, border:"1px solid var(--border)" }}>
-                        Final = <strong style={{ color:"var(--cyan)" }}>70%</strong> × Image + <strong style={{ color:"var(--violet2)" }}>30%</strong> × Lifestyle
+                        Final = <strong style={{ color:"var(--cyan)" }}>60%</strong> × Image + <strong style={{ color:"var(--amber2)" }}>25%</strong> × Lifestyle + <strong style={{ color:"var(--violet2)" }}>15%</strong> × Symptoms
                       </div>
                     </motion.div>
                   )}
@@ -1049,6 +1736,22 @@ export default function Dashboard({ onBack }) {
           </div>
         </main>
       </div>
+
+      {/* ── Advanced Diagnosis Modal ── */}
+      <AnimatePresence>
+        {advancedDiagOpen && (
+          <AdvancedDiagModal
+            apiData={apiData}
+            age={age}
+            tobacco={tobacco}
+            alcohol={alcohol}
+            lesionDuration={lesionDuration}
+            scanTime={scanTime}
+            fileName={fileName}
+            onClose={() => setAdvancedDiagOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }
