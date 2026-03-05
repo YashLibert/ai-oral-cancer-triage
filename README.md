@@ -51,6 +51,7 @@ Build an AI-powered triage system that:
 - ✅ Automatically filters **low-risk patients**
 - 🚨 Instantly prioritizes **high-risk individuals**
 - 📉 Reduces unnecessary **specialist workload by 70–80%**
+- 🔬 Enables **deep clinical profiling** for urgent cases via Advanced Diagnosis
 - 🌍 Makes rural cancer screening **scalable and sustainable**
 
 ---
@@ -65,6 +66,10 @@ Build an AI-powered triage system that:
                     🧮 Structured Risk Scoring
                               ↓
                     🏥 Clinical Triage Classification
+                              ↓
+           🔬 Advanced Symptom Diagnosis (URGENT cases only)
+                              ↓
+                  📄 Downloadable AI Medical Report (.pdf)
 ```
 
 ### Unlike a simple binary classifier, OralAI outputs a complete clinical picture:
@@ -74,15 +79,17 @@ Build an AI-powered triage system that:
 | 📷 Cancer Probability | Model confidence that lesion is malignant |
 | 🌿 Normal Probability | Model confidence the tissue is healthy |
 | 🧬 Lifestyle Risk Score | Weighted score from age, tobacco, alcohol, lesion duration |
-| 🎯 Final Risk Score | Fused score: `70% × Image + 30% × Lifestyle` |
+| 🎯 Final Risk Score | Fused score: `60% × Image + 25% × Lifestyle + 15% × Symptoms` |
 | 🏷️ Triage Level | One of four levels (see below) |
 | 📋 Clinical Recommendation | Actionable next step for the health worker |
+| 🔬 Advanced Symptom Score | Secondary risk layer from clinical symptom questionnaire (URGENT only) |
+| 📄 AI Medical Report | Downloadable dark-theme PDF report with full clinical breakdown |
 
 ### Triage Levels
 
 | Level | Threshold | Action |
 |-------|-----------|--------|
-| 🚨 **URGENT REFERRAL** | Final risk ≥ 75% | Immediate specialist consultation |
+| 🚨 **URGENT REFERRAL** | Final risk ≥ 75% | Immediate specialist consultation + Advanced Diagnosis unlocked |
 | ⚠️ **HIGH RISK** | Final risk ≥ 50% | Schedule specialist in next camp |
 | 🟣 **MODERATE RISK** | Final risk ≥ 30% | Follow-up screening in 30 days |
 | ✅ **LOW RISK** | Final risk < 30% | Routine yearly screening |
@@ -92,6 +99,49 @@ Build an AI-powered triage system that:
 ## 🖥️ System Architecture
 
 ![Architecture](assets/architecture.png)
+
+---
+
+## 🔬 Advanced Diagnosis Flow (URGENT REFERRAL only)
+
+When the initial triage classifies a patient as **URGENT REFERRAL**, a second diagnostic layer is unlocked:
+
+```
+Initial Scan → URGENT REFERRAL
+       ↓
+Advanced Diagnosis button appears
+       ↓
+Clinician completes 5-field symptom questionnaire:
+  • Pain Level         (None / Mild / Severe)
+  • Bleeding from Lesion   (Yes / No)
+  • Difficulty Swallowing  (Yes / No)
+  • Weight Loss Recently   (Yes / No)
+  • Lymph Node Swelling    (Yes / No)
+       ↓
+Symptom Risk Score calculated (weighted engine)
+       ↓
+Final Risk re-fused: 60% Image + 25% Lifestyle + 15% Symptoms
+       ↓
+AI Medical Report generated & available for PDF download
+```
+
+### Risk Fusion Formula
+
+```
+Final Risk = (0.60 × Cancer Probability)
+           + (0.25 × Lifestyle Risk Score)
+           + (0.15 × Symptom Risk Score)
+```
+
+### Symptom Risk Weights (Backend)
+
+| Symptom | Weight |
+|---------|--------|
+| Pain present | +0.20 |
+| Bleeding from lesion | +0.25 |
+| Difficulty swallowing | +0.20 |
+| Unexplained weight loss | +0.15 |
+| Lymph node / neck swelling | +0.20 |
 
 ---
 
@@ -115,13 +165,15 @@ Build an AI-powered triage system that:
     "normal_probability": 87.6
   },
   "lifestyle_risk_score": 0.0,
+  "symptom_risk_score": null,
   "final_risk_score": 8.68,
   "triage_level": "LOW RISK",
-  "recommendation": "Routine yearly screening recommended"
+  "recommendation": "Routine yearly screening recommended",
+  "ai_medical_report": null
 }
 ```
 
-> **Result:** Low-risk patient automatically filtered. No specialist needed. ✅
+> **Result:** Low-risk patient automatically filtered. Advanced Diagnosis not triggered. No specialist needed. ✅
 
 ![Low Risk Result](assets/low-risk-result.png)
 
@@ -138,7 +190,7 @@ Build an AI-powered triage system that:
 | Alcohol consumption | Yes |
 | Lesion duration | 32 days |
 
-### AI Output
+### AI Output (Initial Scan)
 
 ```json
 {
@@ -147,15 +199,38 @@ Build an AI-powered triage system that:
     "normal_probability": 12.6
   },
   "lifestyle_risk_score": 100.0,
+  "symptom_risk_score": 0.0,
   "final_risk_score": 91.18,
   "triage_level": "URGENT REFERRAL",
-  "recommendation": "Immediate specialist consultation required"
+  "recommendation": "Immediate specialist consultation required",
+  "ai_medical_report": "AI ORAL CANCER TRIAGE REPORT..."
 }
 ```
 
-> **Result:** Critical case escalated immediately. Specialist alerted. 🚨
+> **Result:** Critical case escalated immediately. Advanced Diagnosis questionnaire unlocked. AI Medical Report generated and available for PDF download. 🚨
 
 ![High Risk Result](assets/high-risk-result.png)
+
+---
+
+## 📄 AI Medical Report (PDF)
+
+When a patient is classified as **URGENT REFERRAL** and the Advanced Diagnosis questionnaire is completed, a full clinical PDF report is generated client-side and downloaded directly to the clinician's device.
+
+### Report Sections
+
+| Section | Contents |
+|---------|----------|
+| 🧑‍⚕️ Patient Details | Age, lesion duration, tobacco use, alcohol use |
+| 📷 Image Analysis Results | Cancer probability, normal probability (with progress bars) |
+| 🧬 Lifestyle Risk Factors | Lifestyle risk score, final fused risk, age risk flag, lesion duration flag |
+| 🔬 Advanced Symptoms | Pain level, bleeding, swallowing difficulty, weight loss, lymph node swelling |
+| 🎯 Final Risk Assessment | Triage decision, fused risk score, risk formula breakdown |
+| 📋 Clinical Recommendations | 5 color-coded action items with priority levels |
+
+### Design
+
+The PDF is generated **entirely in the browser** using **jsPDF** (no server upload, no third-party processing). It features a **dark clinical aesthetic** matching the OralAI dashboard — dark background, color-coded risk indicators, progress bars, and ambient glow accents. Files are saved as `.pdf` directly to the device.
 
 ---
 
@@ -174,7 +249,8 @@ Build an AI-powered triage system that:
 ```
 1,000 patients → AI filters 700–800 low-risk cases
                → 200–300 flagged for human review
-               → Specialists focus on what matters
+               → URGENT cases receive full Advanced Diagnosis profiling
+               → Specialists focus exclusively on what matters
                → 70–80% workload reduction
                → Early-stage detections increase
 ```
@@ -183,6 +259,7 @@ Build an AI-powered triage system that:
 |--------|--------------|-------------|
 | Specialist workload | 100% of patients | ~20–30% of patients |
 | Time per screening | 45+ minutes | < 8 seconds (AI) |
+| Clinical depth on urgent cases | Manual only | AI-fused multi-layer risk profile |
 | Early detection rate | Low (resource-limited) | Significantly improved |
 | Camp throughput | Limited by specialists | Unlimited (AI-first) |
 | Travel cost per camp | High | Reduced |
@@ -212,6 +289,7 @@ Build an AI-powered triage system that:
 |------------|------|
 | **React 18** | Component-based UI framework |
 | **Framer Motion** | Animations & micro-interactions |
+| **jsPDF 2.5** | Client-side PDF report generation (no server upload) |
 | **CSS Variables** | Design system & theming |
 | **Fetch API** | HTTP requests to Flask backend |
 | **Outfit + Space Mono** | Typography |
@@ -224,7 +302,7 @@ Build an AI-powered triage system that:
 | **Task** | Binary classification — Cancer / Normal |
 | **Input** | 224×224 RGB image, EfficientNet-normalized |
 | **Output** | Sigmoid probability (0 = Cancer, 1 = Normal) |
-| **Fusion** | `Final = 0.7 × Image Score + 0.3 × Lifestyle Score` |
+| **Fusion** | `Final = 0.60 × Image + 0.25 × Lifestyle + 0.15 × Symptoms` |
 | **Accuracy** | 96.2% on validation set |
 
 ---
@@ -280,15 +358,75 @@ AI Oral Cancer Triage Engine/
 
 ---
 
+## 🔌 API Reference
+
+### `GET /`
+
+Health check endpoint.
+
+**Response**
+```json
+{
+  "message": "AI-Powered Oral Cancer Triage API Running",
+  "status": "success"
+}
+```
+
+---
+
+### `POST /predict`
+
+Analyze an oral image with patient metadata and return a full triage result including optional AI medical report.
+
+**Request** — `multipart/form-data`
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `image` | File | ✅ | Oral mucosa image (JPG, PNG, HEIC) |
+| `age` | Integer | ✅ | Patient age in years |
+| `tobacco` | `"yes"` / `"no"` | ✅ | Tobacco use history |
+| `alcohol` | `"yes"` / `"no"` | ✅ | Alcohol use history |
+| `lesion_duration` | Integer | ✅ | Duration of lesion in days |
+| `pain` | `"yes"` / `"no"` | ⚪ | Pain present (Advanced Diagnosis) |
+| `bleeding` | `"yes"` / `"no"` | ⚪ | Bleeding from lesion (Advanced Diagnosis) |
+| `swallowing` | `"yes"` / `"no"` | ⚪ | Difficulty swallowing (Advanced Diagnosis) |
+| `weight_loss` | `"yes"` / `"no"` | ⚪ | Unexplained weight loss (Advanced Diagnosis) |
+| `neck_swelling` | `"yes"` / `"no"` | ⚪ | Lymph node / neck swelling (Advanced Diagnosis) |
+
+> ⚪ Advanced Diagnosis fields are optional. When omitted, symptom risk defaults to 0.
+
+**Response** — `application/json`
+
+```json
+{
+  "status": "success",
+  "image_analysis": {
+    "cancer_probability": 87.4,
+    "normal_probability": 12.6
+  },
+  "lifestyle_risk_score": 80.0,
+  "symptom_risk_score": 95.0,
+  "final_risk_score": 91.18,
+  "triage_level": "URGENT REFERRAL",
+  "recommendation": "Immediate specialist consultation required",
+  "ai_medical_report": "AI ORAL CANCER TRIAGE REPORT\n..."
+}
+```
+
+> `ai_medical_report` is only populated when `triage_level` is `"URGENT REFERRAL"`. It is `null` for all other triage levels.
+
+---
+
 ## 🔒 Ethical Considerations
 
 OralAI is built with responsible AI principles at its core:
 
 - 🩺 **AI as assistant, not replacement** — Final diagnosis authority rests with licensed medical professionals
-- 🔐 **Data minimization** — No patient images are transmitted to external servers without explicit export
+- 🔐 **Data minimization** — No patient images are transmitted to external servers without explicit export. PDF reports are generated entirely client-side.
 - 📋 **Auditability** — Every triage decision is logged with the input factors that produced it
 - ⚖️ **Bias awareness** — Model is validated across age groups, genders, and lesion types
 - 🏥 **Harm reduction** — False negatives are treated more conservatively than false positives in the triage threshold design
+- 🔬 **Layered confidence** — Advanced Diagnosis adds a mandatory second clinical layer before any urgent referral report is finalized
 
 ---
 
@@ -302,6 +440,7 @@ OralAI is built with responsible AI principles at its core:
 | 🏛️ Govt. Integration | Medium | API integration with ABDM / Ayushman Bharat health stack |
 | 🔄 Longitudinal tracking | Medium | Track patient risk scores over multiple screening visits |
 | 🗣️ Multilingual UI | Low | Marathi, Hindi, Tamil support for field workers |
+| 📊 Camp Analytics Export | Low | Bulk PDF/CSV export of all screened patients per camp session |
 
 ---
 
@@ -346,7 +485,7 @@ npm run dev
 
 The dashboard opens at `http://localhost:5173`
 
-### 4. Run a Test Prediction
+### 4. Run a Test Prediction (Basic)
 
 ```bash
 curl -X POST http://127.0.0.1:5000/predict \
@@ -357,38 +496,20 @@ curl -X POST http://127.0.0.1:5000/predict \
   -F "lesion_duration=20"
 ```
 
----
+### 5. Run a Test Prediction (With Advanced Diagnosis)
 
-## 🔌 API Reference
-
-### `POST /predict`
-
-Analyze an oral image with patient metadata and return a triage result.
-
-**Request** — `multipart/form-data`
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `image` | File | ✅ | Oral mucosa image (JPG, PNG, HEIC) |
-| `age` | Integer | ✅ | Patient age in years |
-| `tobacco` | `"yes"` / `"no"` | ✅ | Tobacco use history |
-| `alcohol` | `"yes"` / `"no"` | ✅ | Alcohol use history |
-| `lesion_duration` | Integer | ✅ | Duration of lesion in days |
-
-**Response** — `application/json`
-
-```json
-{
-  "status": "success",
-  "image_analysis": {
-    "cancer_probability": 87.4,
-    "normal_probability": 12.6
-  },
-  "lifestyle_risk_score": 80.0,
-  "final_risk_score": 85.18,
-  "triage_level": "URGENT REFERRAL",
-  "recommendation": "Immediate specialist consultation required"
-}
+```bash
+curl -X POST http://127.0.0.1:5000/predict \
+  -F "image=@sample_image.jpg" \
+  -F "age=55" \
+  -F "tobacco=yes" \
+  -F "alcohol=yes" \
+  -F "lesion_duration=32" \
+  -F "pain=yes" \
+  -F "bleeding=yes" \
+  -F "swallowing=no" \
+  -F "weight_loss=yes" \
+  -F "neck_swelling=no"
 ```
 
 ---
