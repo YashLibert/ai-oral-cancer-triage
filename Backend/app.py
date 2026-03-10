@@ -9,22 +9,20 @@ from tensorflow.keras.applications.efficientnet import preprocess_input
 app = Flask(__name__)
 CORS(app)
 
-# =========================
+
 # CONFIG
-# =========================
+
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "models", "best_oral_model.keras")
 IMAGE_SIZE = (224, 224)
 
-# =========================
 # LOAD MODEL
-# =========================
+
 print("🔄 Loading model...")
 model = tf.keras.models.load_model(MODEL_PATH, compile=False)
 print("✅ Model loaded successfully!")
 
-# =========================
 # IMAGE PREPROCESSING
-# =========================
+
 def preprocess_image(image):
     image = image.convert("RGB")
     image = image.resize(IMAGE_SIZE)
@@ -33,10 +31,8 @@ def preprocess_image(image):
     image = np.expand_dims(image, axis=0)
     return image
 
-
-# =========================
 # LIFESTYLE RISK ENGINE
-# =========================
+
 def calculate_lifestyle_risk(age, tobacco, alcohol, lesion_duration):
 
     score = 0.0
@@ -56,9 +52,8 @@ def calculate_lifestyle_risk(age, tobacco, alcohol, lesion_duration):
     return min(score, 1.0)
 
 
-# =========================
 # ADVANCED SYMPTOM RISK
-# =========================
+
 def advanced_symptom_risk(pain, bleeding, swallowing, weight_loss, neck_swelling):
 
     score = 0.0
@@ -81,9 +76,9 @@ def advanced_symptom_risk(pain, bleeding, swallowing, weight_loss, neck_swelling
     return min(score, 1.0)
 
 
-# =========================
+
 # TRIAGE SYSTEM
-# =========================
+
 def generate_triage(final_risk_score):
 
     if final_risk_score >= 0.75:
@@ -99,9 +94,9 @@ def generate_triage(final_risk_score):
         return "LOW RISK", "Routine yearly screening recommended"
 
 
-# =========================
+
 # AI MEDICAL REPORT
-# =========================
+
 def generate_medical_report(patient_data, analysis_data, triage_level):
 
     report = f"""
@@ -140,9 +135,9 @@ Further clinical examination and biopsy recommended.
     return report
 
 
-# =========================
+
 # ROUTES
-# =========================
+
 @app.route("/")
 def home():
     return jsonify({
@@ -164,26 +159,26 @@ def predict():
         if file.filename == "":
             return jsonify({"status": "error", "message": "Empty filename"}), 400
 
-        # -------------------------
+    
         # Patient Metadata
-        # -------------------------
+    
         age = int(request.form.get("age", 0))
         tobacco = request.form.get("tobacco", "no")
         alcohol = request.form.get("alcohol", "no")
         lesion_duration = int(request.form.get("lesion_duration", 0))
 
-        # -------------------------
+        
         # Advanced Symptoms
-        # -------------------------
+        
         pain = request.form.get("pain", "no")
         bleeding = request.form.get("bleeding", "no")
         swallowing = request.form.get("swallowing", "no")
         weight_loss = request.form.get("weight_loss", "no")
         neck_swelling = request.form.get("neck_swelling", "no")
 
-        # -------------------------
+        
         # Image Processing
-        # -------------------------
+        
         image = Image.open(file)
         processed = preprocess_image(image)
 
@@ -196,9 +191,9 @@ def predict():
         cancer_probability = 1 - raw_prediction
         normal_probability = raw_prediction
 
-        # -------------------------
+        
         # Risk Engines
-        # -------------------------
+        
         lifestyle_risk = calculate_lifestyle_risk(age, tobacco, alcohol, lesion_duration)
 
         symptom_risk = advanced_symptom_risk(
@@ -209,23 +204,23 @@ def predict():
             neck_swelling
         )
 
-        # -------------------------
+        
         # FINAL RISK FUSION
-        # -------------------------
+        
         final_risk_score = (
             0.6 * cancer_probability +
             0.25 * lifestyle_risk +
             0.15 * symptom_risk
         )
 
-        # -------------------------
+        
         # TRIAGE DECISION
-        # -------------------------
+        
         triage_level, recommendation = generate_triage(final_risk_score)
 
-        # -------------------------
+    
         # AI MEDICAL REPORT
-        # -------------------------
+    
         medical_report = None
 
         if triage_level == "URGENT REFERRAL":
@@ -255,9 +250,9 @@ def predict():
                 triage_level
             )
 
-        # -------------------------
+    
         # RESPONSE
-        # -------------------------
+    
         return jsonify({
 
             "status": "success",
@@ -288,8 +283,8 @@ def predict():
         }), 500
 
 
-# =========================
+
 # RUN SERVER
-# =========================
+
 if __name__ == "__main__":
     app.run(debug=True)
